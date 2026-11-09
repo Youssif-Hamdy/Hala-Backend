@@ -4,6 +4,7 @@ const cookieParser = require("cookie-parser");
 
 const authRoutes = require("./src/routes/auth.routes");
 const applicationRoutes = require("./src/routes/application.routes");
+const userRoutes = require("./src/routes/user.routes");
 
 const app = express();
 
@@ -15,6 +16,7 @@ app.use(cookieParser());
 // ===== Routes =====
 app.use("/api/auth", authRoutes);
 app.use("/api/applications", applicationRoutes);
+app.use("/api/users", userRoutes);
 
 // ===== Health Check =====
 app.get("/", (req, res) => {
