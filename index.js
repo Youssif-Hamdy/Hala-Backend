@@ -1,12 +1,25 @@
 require("dotenv").config();
 const express = require("express");
 const cookieParser = require("cookie-parser");
+const cors = require("cors");
 
 const authRoutes = require("./src/routes/auth.routes");
 const applicationRoutes = require("./src/routes/application.routes");
 const userRoutes = require("./src/routes/user.routes");
 
 const app = express();
+
+// ===== CORS Middleware =====
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      // السماح للطلبات من أي origin (مثل localhost أو vercel frontend)
+      if (!origin) return callback(null, true);
+      return callback(null, true);
+    },
+    credentials: true, // ضروري عشان الكوكيز تعدي
+  })
+);
 
 // ===== Middleware =====
 app.use(express.json());

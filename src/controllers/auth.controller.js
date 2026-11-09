@@ -5,13 +5,16 @@ const prisma = require("../lib/prisma");
 // ===== Cookie Options =====
 const COOKIE_NAME = "auth_token";
 
-const getCookieOptions = () => ({
-  httpOnly: true,       // JavaScript مش تقدر توصله — حماية من XSS
-  secure: process.env.NODE_ENV === "production", // HTTPS فقط في production
-  sameSite: "lax",      // حماية من CSRF
-  maxAge: 7 * 24 * 60 * 60 * 1000, // 7 أيام بالميللي ثانية
-  path: "/",
-});
+const getCookieOptions = () => {
+  const isProduction = process.env.NODE_ENV === "production";
+  return {
+    httpOnly: true,       // JavaScript مش تقدر توصله — حماية من XSS
+    secure: isProduction, // HTTPS فقط في production
+    sameSite: isProduction ? "none" : "lax", // none في الإنتاج لدعم cross-origin بين frontend و backend
+    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 أيام بالميللي ثانية
+    path: "/",
+  };
+};
 
 // ===== Helper: توليد JWT توكن =====
 const generateToken = (user) => {
@@ -29,7 +32,13 @@ const setAuthCookie = (res, token) => {
 
 // ===== Helper: امسح الكوكي =====
 const clearAuthCookie = (res) => {
-  res.clearCookie(COOKIE_NAME, { path: "/" });
+  const isProduction = process.env.NODE_ENV === "production";
+  res.clearCookie(COOKIE_NAME, {
+    httpOnly: true,
+    secure: isProduction,
+    sameSite: isProduction ? "none" : "lax",
+    path: "/",
+  });
 };
 
 // ===== POST /api/auth/register =====
