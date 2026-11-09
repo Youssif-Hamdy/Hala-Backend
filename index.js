@@ -32,8 +32,13 @@ app.use((err, req, res, next) => {
   res.status(500).json({ message: "حصل خطأ في السيرفر" });
 });
 
-// ===== Start Server =====
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`✅ Server running on http://localhost:${PORT}`);
-});
+// ===== Start Server (local only) =====
+if (process.env.NODE_ENV !== "production") {
+  const PORT = process.env.PORT || 3000;
+  app.listen(PORT, () => {
+    console.log(`✅ Server running on http://localhost:${PORT}`);
+  });
+}
+
+// ===== Export للـ Vercel Serverless =====
+module.exports = app;
