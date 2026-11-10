@@ -6,6 +6,7 @@ const cors = require("cors");
 const authRoutes = require("./src/routes/auth.routes");
 const applicationRoutes = require("./src/routes/application.routes");
 const userRoutes = require("./src/routes/user.routes");
+const bookingRoutes = require("./src/routes/booking.routes");
 
 const app = express();
 
@@ -30,6 +31,7 @@ app.use(cookieParser());
 app.use("/api/auth", authRoutes);
 app.use("/api/applications", applicationRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/bookings", bookingRoutes);
 
 // ===== Health Check =====
 app.get("/", (req, res) => {

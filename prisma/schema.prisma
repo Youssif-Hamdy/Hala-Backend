@@ -16,6 +16,12 @@ enum Role {
   ADMIN
 }
 
+enum BookingStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+}
+
 model User {
   id        String   @id @default(cuid())
   name      String
@@ -26,6 +32,7 @@ model User {
   updatedAt DateTime @updatedAt
 
   application Application?
+  bookings    Booking[]
 
   @@map("users")
 }
@@ -41,4 +48,18 @@ model Application {
   updatedAt      DateTime @updatedAt
 
   @@map("applications")
+}
+
+model Booking {
+  id        String        @id @default(cuid())
+  userId    String
+  user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name      String
+  phone     String
+  email     String
+  status    BookingStatus @default(PENDING)
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+
+  @@map("bookings")
 }
