@@ -72,6 +72,7 @@ const register = async (req, res) => {
     return res.status(201).json({
       message: "تم التسجيل بنجاح",
       user,
+      token,
     });
   } catch (error) {
     console.error("Register error:", error);
@@ -109,6 +110,7 @@ const login = async (req, res) => {
         email: user.email,
         role: user.role,
       },
+      token,
     });
   } catch (error) {
     console.error("Login error:", error);
@@ -150,6 +152,7 @@ const adminLogin = async (req, res) => {
         email: user.email,
         role: user.role,
       },
+      token,
     });
   } catch (error) {
     console.error("Admin login error:", error);

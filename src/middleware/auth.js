@@ -2,9 +2,14 @@ const jwt = require("jsonwebtoken");
 
 const COOKIE_NAME = "auth_token";
 
-// ===== Middleware: التحقق من تسجيل الدخول عبر Cookie =====
+// ===== Middleware: التحقق من تسجيل الدخول (يدعم Cookie و Bearer Header) =====
 const authenticate = (req, res, next) => {
-  const token = req.cookies?.[COOKIE_NAME];
+  let token = req.cookies?.[COOKIE_NAME];
+
+  // لو المتصفح (زي الموبايل/آيفون) حاجب الكوكيز، ناخد التوكن من الـ Authorization Header
+  if (!token && req.headers.authorization?.startsWith("Bearer ")) {
+    token = req.headers.authorization.split(" ")[1];
+  }
 
   if (!token) {
     return res.status(401).json({ message: "لازم تسجل دخول الأول" });
@@ -21,7 +26,7 @@ const authenticate = (req, res, next) => {
 
 // ===== Middleware: التحقق من صلاحيات الأدمن =====
 const authorizeAdmin = (req, res, next) => {
-  if (req.user.role !== "ADMIN") {
+  if (req.user?.role !== "ADMIN") {
     return res.status(403).json({ message: "صلاحيات الأدمن فقط" });
   }
   next();
