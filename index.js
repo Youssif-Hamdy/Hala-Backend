@@ -7,6 +7,7 @@ const authRoutes = require("./src/routes/auth.routes");
 const applicationRoutes = require("./src/routes/application.routes");
 const userRoutes = require("./src/routes/user.routes");
 const bookingRoutes = require("./src/routes/booking.routes");
+const consultationRoutes = require("./src/routes/consultation.routes");
 
 const app = express();
 
@@ -32,6 +33,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/applications", applicationRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/bookings", bookingRoutes);
+app.use("/api/consultations", consultationRoutes);
 
 // ===== Health Check =====
 app.get("/", (req, res) => {

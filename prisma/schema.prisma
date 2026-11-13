@@ -22,6 +22,13 @@ enum BookingStatus {
   REJECTED
 }
 
+enum ConsultationStatus {
+  PENDING
+  ACCEPTED
+  COMPLETED
+  CANCELLED
+}
+
 model User {
   id        String   @id @default(cuid())
   name      String
@@ -31,8 +38,9 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  application Application?
-  bookings    Booking[]
+  application   Application?
+  bookings      Booking[]
+  consultations Consultation[]
 
   @@map("users")
 }
@@ -62,4 +70,21 @@ model Booking {
   updatedAt DateTime      @updatedAt
 
   @@map("bookings")
+}
+
+model Consultation {
+  id        String             @id @default(cuid())
+  userId    String
+  user      User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name      String
+  phone     String
+  email     String
+  duration  Int                // 30, 60, or 120 (بالدقائق)
+  price     Float              // 20, 30, or 40 (بالدولار)
+  notes     String?            // ملاحظات أو تفاصيل الاستشارة
+  status    ConsultationStatus @default(PENDING)
+  createdAt DateTime           @default(now())
+  updatedAt DateTime           @updatedAt
+
+  @@map("consultations")
 }
